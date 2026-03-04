@@ -2,8 +2,15 @@ export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-20 md:py-28">
       <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-12 md:gap-20 items-start">
-        {/* Left: Identity */}
+        {/* Left: Photo + Identity */}
         <div>
+          <div className="mb-8 overflow-hidden">
+            <img
+              src="/jooyoi.jpeg"
+              alt="Jooyoung Kim"
+              className="w-full object-cover grayscale-[15%] sepia-[10%]"
+            />
+          </div>
           <h1 className="font-serif text-6xl md:text-7xl font-light leading-[1.05] text-[#2c2c2c]">
             Jooyoung
             <br />
