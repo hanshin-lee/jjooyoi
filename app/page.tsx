@@ -45,18 +45,59 @@ export default function AboutPage() {
             institutional publications, and artist archives across international
             contexts.
           </p>
-          <div className="flex gap-6 pt-2">
+          <div className="pt-4 space-y-2.5">
+            <p className="font-sans text-xs tracking-widest uppercase text-[#aaa098] mb-3">
+              Contact
+            </p>
             <a
               href="mailto:jooyoungkim19@gmail.com"
-              className="font-sans text-xs tracking-widest uppercase text-[#8b7355] hover:text-[#2c2c2c] transition-colors border-b border-[#c8bfaf] pb-0.5"
+              className="flex items-center gap-3 group"
             >
-              Get in touch
+              <span className="font-sans text-xs tracking-widest uppercase text-[#c8bfaf] w-20">Email</span>
+              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors">
+                jooyoungkim19@gmail.com
+              </span>
             </a>
+            <a
+              href="https://www.instagram.com/jjooyoi_/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 group"
+            >
+              <span className="font-sans text-xs tracking-widest uppercase text-[#c8bfaf] w-20">Instagram</span>
+              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors">
+                @jjooyoi_
+              </span>
+            </a>
+            <a
+              href="https://www.instagram.com/by_jooyoi/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 group"
+            >
+              <span className="font-sans text-xs tracking-widest uppercase text-[#c8bfaf] w-20"></span>
+              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors">
+                @by_jooyoi
+              </span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/jooyoung-kim19/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 group"
+            >
+              <span className="font-sans text-xs tracking-widest uppercase text-[#c8bfaf] w-20">LinkedIn</span>
+              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors">
+                jooyoung-kim19
+              </span>
+            </a>
+          </div>
+          <div className="pt-4">
             <a
               href="/resume"
               className="font-sans text-xs tracking-widest uppercase text-[#aaa098] hover:text-[#2c2c2c] transition-colors border-b border-[#ddd6c8] pb-0.5"
             >
-              View CV
+              View CV →
             </a>
           </div>
         </div>

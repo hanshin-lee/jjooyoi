@@ -32,16 +32,42 @@ export default function RootLayout({
         <Nav />
         <main className="min-h-screen">{children}</main>
         <footer className="border-t border-beige-300 py-8 mt-24">
-          <div className="max-w-4xl mx-auto px-6 flex justify-between items-center">
+          <div className="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <span className="font-sans text-xs text-[#aaa098] tracking-widest uppercase">
               © 2025 Jooyoung Kim
             </span>
-            <a
-              href="mailto:jooyoungkim19@gmail.com"
-              className="font-sans text-xs text-[#8b7355] hover:text-[#2c2c2c] transition-colors"
-            >
-              jooyoungkim19@gmail.com
-            </a>
+            <div className="flex flex-wrap gap-6">
+              <a
+                href="mailto:jooyoungkim19@gmail.com"
+                className="font-sans text-xs text-[#8b7355] hover:text-[#2c2c2c] transition-colors"
+              >
+                Email
+              </a>
+              <a
+                href="https://www.instagram.com/jjooyoi_/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-sans text-xs text-[#8b7355] hover:text-[#2c2c2c] transition-colors"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://www.instagram.com/by_jooyoi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-sans text-xs text-[#8b7355] hover:text-[#2c2c2c] transition-colors"
+              >
+                Instagram (Art)
+              </a>
+              <a
+                href="https://www.linkedin.com/in/jooyoung-kim19/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-sans text-xs text-[#8b7355] hover:text-[#2c2c2c] transition-colors"
+              >
+                LinkedIn
+              </a>
+            </div>
           </div>
         </footer>
       </body>
