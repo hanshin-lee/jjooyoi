@@ -204,7 +204,7 @@ export default function ProjectsPage() {
                         value={project.image ?? ''}
                         onSave={async (v) => {
                           updateProject(i, { image: v || undefined })
-                          await patchProject(project.id, { image: v || null })
+                          await patchProject(project.id, { image: v || undefined })
                         }}
                         className="font-sans text-xs text-[#aaa098] block"
                       />
@@ -217,7 +217,7 @@ export default function ProjectsPage() {
                         value={project.link ?? ''}
                         onSave={async (v) => {
                           updateProject(i, { link: v || undefined })
-                          await patchProject(project.id, { link: v || null })
+                          await patchProject(project.id, { link: v || undefined })
                         }}
                         className="font-sans text-xs text-[#aaa098] block"
                       />
