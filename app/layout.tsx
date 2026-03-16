@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import { Providers } from "@/components/Providers";
 import { AdminBar } from "@/components/AdminBar";
+import CursorEffect from "@/components/CursorEffect";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${cormorant.variable} ${inter.variable} bg-beige-50 text-[#2c2c2c] antialiased`}
       >
         <Providers>
+          <CursorEffect />
           <Nav />
           <main className="min-h-screen">{children}</main>
           <footer className="border-t border-beige-300 py-8 mt-24">

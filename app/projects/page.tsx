@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { EditableField } from '@/components/EditableField'
 import { useAdmin } from '@/contexts/AdminContext'
+import { DropZone } from '@/components/DropZone'
 
 type Project = {
   id: string
@@ -200,15 +201,15 @@ export default function ProjectsPage() {
                   />
                   {isAdmin && (
                     <div className="mt-5">
-                      <EditableField
-                        value={project.image ?? ''}
-                        onSave={async (v) => {
-                          updateProject(i, { image: v || undefined })
-                          await patchProject(project.id, { image: v || undefined })
+                      <p className="font-sans text-xs text-[#c8bfaf] tracking-widest uppercase mb-2">Cover image</p>
+                      <DropZone
+                        currentPath={project.image}
+                        folder="projects"
+                        onUpload={async (path) => {
+                          updateProject(i, { image: path })
+                          await patchProject(project.id, { image: path })
                         }}
-                        className="font-sans text-xs text-[#aaa098] block"
                       />
-                      <span className="font-sans text-xs text-[#c8bfaf]">↑ image path</span>
                     </div>
                   )}
                   {isAdmin && (

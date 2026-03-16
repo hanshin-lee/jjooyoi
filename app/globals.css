@@ -17,3 +17,147 @@
     font-family: var(--font-cormorant), Georgia, serif;
   }
 }
+
+/* ── Custom Cursor ────────────────────────────────────────────────────────── */
+
+@media (hover: hover) and (pointer: fine) {
+  body,
+  a,
+  button,
+  [role="button"],
+  input,
+  textarea,
+  label,
+  select {
+    cursor: none !important;
+  }
+
+  .cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    pointer-events: none;
+    width: 5px;
+    height: 5px;
+    background: #8b7355;
+    border-radius: 50%;
+    margin-left: -2.5px;
+    margin-top: -2.5px;
+    will-change: transform;
+    transition:
+      width 0.2s ease,
+      height 0.2s ease,
+      margin 0.2s ease,
+      background-color 0.2s ease,
+      opacity 0.4s ease;
+  }
+
+  .cursor-dot.is-hovering {
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    margin-top: -4px;
+    background-color: #2c2c2c;
+  }
+
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    pointer-events: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(139, 115, 85, 0.38);
+    margin-left: -18px;
+    margin-top: -18px;
+    will-change: transform;
+    transition:
+      width 0.35s ease,
+      height 0.35s ease,
+      margin 0.35s ease,
+      border-color 0.35s ease,
+      border-radius 0.35s ease,
+      opacity 0.4s ease;
+  }
+
+  .cursor-ring.is-hovering {
+    width: 54px;
+    height: 54px;
+    margin-left: -27px;
+    margin-top: -27px;
+    border-color: rgba(44, 44, 44, 0.28);
+  }
+
+  /* Slightly larger ring over images — like a gallery loupe */
+  .cursor-ring.is-image {
+    width: 64px;
+    height: 64px;
+    margin-left: -32px;
+    margin-top: -32px;
+    border-color: rgba(139, 115, 85, 0.22);
+    border-radius: 2px;
+  }
+}
+
+/* ── Photo tilt ───────────────────────────────────────────────────────────── */
+
+.photo-tilt {
+  will-change: transform;
+  transition: transform 0.5s ease;
+}
+
+.photo-tilt img {
+  filter: grayscale(15%) sepia(10%);
+  transition: filter 0.5s ease;
+}
+
+.photo-tilt:hover img {
+  filter: grayscale(5%) sepia(4%);
+}
+
+/* ── Page entrance ────────────────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.7s ease both;
+}
+
+.fade-up-1 { animation: fadeUp 0.7s 0.05s ease both; }
+.fade-up-2 { animation: fadeUp 0.7s 0.15s ease both; }
+.fade-up-3 { animation: fadeUp 0.7s 0.25s ease both; }
+.fade-up-4 { animation: fadeUp 0.7s 0.38s ease both; }
+
+/* ── Sliding underline links ──────────────────────────────────────────────── */
+
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}

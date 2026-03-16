@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { EditableField } from '@/components/EditableField'
 import { useAdmin } from '@/contexts/AdminContext'
+import { DropZone } from '@/components/DropZone'
 
 type Interest = {
   id: string
@@ -80,41 +81,36 @@ function PhotoManager({
   photos: string[]
   onChange: (photos: string[]) => void
 }) {
-  const update = (i: number, val: string) => {
+  const remove = (i: number) => onChange(photos.filter((_, idx) => idx !== i))
+
+  const replace = (i: number, path: string) => {
     const next = [...photos]
-    next[i] = val
+    next[i] = path
     onChange(next)
   }
 
-  const remove = (i: number) => {
-    onChange(photos.filter((_, idx) => idx !== i))
-  }
-
-  const add = () => {
-    onChange([...photos, ''])
-  }
-
   return (
-    <div className="mt-4 space-y-1.5">
-      <p className="font-sans text-xs text-[#c8bfaf] tracking-widest uppercase mb-2">Photos</p>
+    <div className="mt-4 space-y-3">
+      <p className="font-sans text-xs text-[#c8bfaf] tracking-widest uppercase">Photos</p>
+
       {photos.map((src, i) => (
-        <div key={i} className="flex gap-2 items-center">
-          <input
-            value={src}
-            onChange={(e) => update(i, e.target.value)}
-            placeholder="/interests/photo.jpg"
-            className="flex-1 font-sans text-xs text-[#aaa098] bg-[#fdf8f0] border border-[#d4cfc8] rounded px-2 py-1 outline-none focus:border-[#8b7355]"
+        <div key={i} className="relative">
+          <DropZone
+            currentPath={src || undefined}
+            folder="interests"
+            onUpload={(path) => replace(i, path)}
           />
           <button
             onClick={() => remove(i)}
-            className="font-sans text-xs text-[#c8bfaf] hover:text-red-400 transition-colors px-1"
+            className="absolute top-1.5 right-1.5 z-10 bg-beige-50/80 border border-[#d4cfc8] text-[#c8bfaf] hover:text-red-400 text-xs px-1.5 py-0.5 rounded-sm transition-colors"
           >
             ×
           </button>
         </div>
       ))}
+
       <button
-        onClick={add}
+        onClick={() => onChange([...photos, ''])}
         className="font-sans text-xs tracking-widest uppercase text-[#8b7355] hover:text-[#2c2c2c] transition-colors"
       >
         + Add photo

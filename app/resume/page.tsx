@@ -322,7 +322,7 @@ export default function ResumePage() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-20">
       {/* Header */}
-      <div className="mb-16">
+      <div className="mb-16 fade-up">
         <h1 className="font-serif text-4xl font-light text-[#2c2c2c]">Curriculum Vitae</h1>
         <div className="w-full h-px bg-[#d4cfc8] mt-5" />
       </div>
@@ -334,7 +334,11 @@ export default function ResumePage() {
         </h2>
         <div className={`space-y-12 ${isAdmin ? 'pl-8' : ''}`}>
           {experience.map((role, i) => (
-            <div key={role.id} className="relative">
+            <div key={role.id} className="relative group/entry">
+              {/* Hover accent line */}
+              {!isAdmin && (
+                <div className="absolute -left-3 top-1 bottom-1 w-px bg-[#8b7355] origin-top scale-y-0 group-hover/entry:scale-y-100 transition-transform duration-500 ease-out opacity-0 group-hover/entry:opacity-100" />
+              )}
               {isAdmin && (
                 <div className="absolute -left-8 top-0 flex flex-col gap-0.5">
                   <button
@@ -380,7 +384,7 @@ export default function ResumePage() {
                       await patchEntry('experience', role.id, { title: v })
                     }}
                     as="p"
-                    className="font-serif text-xl font-light text-[#2c2c2c] leading-tight"
+                    className="font-serif text-xl font-light text-[#2c2c2c] leading-tight transition-colors duration-300 group-hover/entry:text-[#8b7355]"
                   />
                   <EditableField
                     value={role.place}

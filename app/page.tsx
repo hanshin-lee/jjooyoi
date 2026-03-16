@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { EditableField } from '@/components/EditableField'
 
 type AboutContent = {
@@ -28,6 +28,24 @@ async function saveAbout(fields: Partial<AboutContent>) {
 
 export default function AboutPage() {
   const [content, setContent] = useState<AboutContent>(DEFAULTS)
+  const photoRef = useRef<HTMLDivElement>(null)
+
+  const handlePhotoMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = photoRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    el.style.transform = `perspective(700px) rotateX(${y * -5}deg) rotateY(${x * 5}deg)`
+    el.style.transition = 'transform 0.08s ease'
+  }
+
+  const handlePhotoLeave = () => {
+    const el = photoRef.current
+    if (!el) return
+    el.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg)'
+    el.style.transition = 'transform 0.6s ease'
+  }
 
   useEffect(() => {
     fetch('/api/content/about')
@@ -48,12 +66,17 @@ export default function AboutPage() {
     <div className="max-w-4xl mx-auto px-6 py-20 md:py-28">
       <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-12 md:gap-20 items-start">
         {/* Left: Photo + Identity */}
-        <div>
-          <div className="mb-8 overflow-hidden">
+        <div className="fade-up-1">
+          <div
+            ref={photoRef}
+            className="mb-8 overflow-hidden photo-tilt"
+            onMouseMove={handlePhotoMove}
+            onMouseLeave={handlePhotoLeave}
+          >
             <img
               src="/jooyoi.jpeg"
               alt="Jooyoung Kim"
-              className="w-full object-cover grayscale-[15%] sepia-[10%]"
+              className="w-full object-cover"
             />
           </div>
           <h1 className="font-serif text-6xl md:text-7xl font-light leading-[1.05] text-[#2c2c2c]">
@@ -79,7 +102,7 @@ export default function AboutPage() {
         </div>
 
         {/* Right: Bio */}
-        <div className="space-y-6 pt-1">
+        <div className="space-y-6 pt-1 fade-up-2">
           <EditableField
             value={content.bio_intro}
             onSave={async (v) => {
@@ -122,7 +145,7 @@ export default function AboutPage() {
               className="flex items-center gap-3 group"
             >
               <span className="font-sans text-xs tracking-widest uppercase text-[#c8bfaf] w-20">Email</span>
-              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors">
+              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors duration-300 link-underline">
                 jooyoungkim19@gmail.com
               </span>
             </a>
@@ -133,7 +156,7 @@ export default function AboutPage() {
               className="flex items-center gap-3 group"
             >
               <span className="font-sans text-xs tracking-widest uppercase text-[#c8bfaf] w-20">Instagram</span>
-              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors">
+              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors duration-300 link-underline">
                 @jjooyoi_
               </span>
             </a>
@@ -144,7 +167,7 @@ export default function AboutPage() {
               className="flex items-center gap-3 group"
             >
               <span className="font-sans text-xs tracking-widest uppercase text-[#c8bfaf] w-20"></span>
-              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors">
+              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors duration-300 link-underline">
                 @by_jooyoi
               </span>
             </a>
@@ -155,7 +178,7 @@ export default function AboutPage() {
               className="flex items-center gap-3 group"
             >
               <span className="font-sans text-xs tracking-widest uppercase text-[#c8bfaf] w-20">LinkedIn</span>
-              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors">
+              <span className="font-sans text-sm text-[#8b7355] group-hover:text-[#2c2c2c] transition-colors duration-300 link-underline">
                 jooyoung-kim19
               </span>
             </a>
