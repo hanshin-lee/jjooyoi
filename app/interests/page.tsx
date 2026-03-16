@@ -79,7 +79,7 @@ function PhotoManager({
   onChange,
 }: {
   photos: string[]
-  onChange: (photos: string[]) => void
+  onChange: (photos: string[]) => void | Promise<void>
 }) {
   const remove = (i: number) => onChange(photos.filter((_, idx) => idx !== i))
 
@@ -122,7 +122,7 @@ function PhotoManager({
 export default function InterestsPage() {
   const { isAdmin } = useAdmin()
   const [interests, setInterests] = useState<Interest[]>(DEFAULT_INTERESTS)
-  const [savingPhotos, setSavingPhotos] = useState<Record<string, boolean>>({})
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     fetch('/api/content/interests')
@@ -131,6 +131,7 @@ export default function InterestsPage() {
         if (Array.isArray(data) && data.length > 0) setInterests(data)
       })
       .catch(() => {})
+      .finally(() => setLoaded(true))
   }, [])
 
   const updateInterest = (i: number, fields: Partial<Interest>) => {
@@ -170,16 +171,9 @@ export default function InterestsPage() {
     ])
   }
 
-  const handleSavePhotos = async (i: number, photos: string[]) => {
-    const interest = interests[i]
-    setSavingPhotos((prev) => ({ ...prev, [interest.id]: true }))
-    updateInterest(i, { photos })
-    await patchInterest(interest.id, { photos })
-    setSavingPhotos((prev) => ({ ...prev, [interest.id]: false }))
-  }
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-20">
+    <div className={`max-w-4xl mx-auto px-6 py-20 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
       {/* Header */}
       <div className="mb-16">
         <h1 className="font-serif text-4xl font-light text-[#2c2c2c]">Interests</h1>
@@ -260,15 +254,11 @@ export default function InterestsPage() {
                       <PhotoCollage photos={interest.photos.filter(Boolean)} />
                       <PhotoManager
                         photos={interest.photos}
-                        onChange={(photos) => updateInterest(i, { photos })}
+                        onChange={async (photos) => {
+                          updateInterest(i, { photos })
+                          await patchInterest(interest.id, { photos })
+                        }}
                       />
-                      <button
-                        onClick={() => handleSavePhotos(i, interest.photos)}
-                        disabled={savingPhotos[interest.id]}
-                        className="mt-3 font-sans text-xs tracking-widest uppercase text-[#8b7355] hover:text-[#2c2c2c] transition-colors border-b border-[#c8bfaf] pb-0.5 disabled:opacity-50"
-                      >
-                        {savingPhotos[interest.id] ? 'Saving…' : 'Save photos'}
-                      </button>
                     </div>
                   )}
                 </div>

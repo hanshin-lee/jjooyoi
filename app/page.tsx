@@ -28,6 +28,7 @@ async function saveAbout(fields: Partial<AboutContent>) {
 
 export default function AboutPage() {
   const [content, setContent] = useState<AboutContent>(DEFAULTS)
+  const [loaded, setLoaded] = useState(false)
   const photoRef = useRef<HTMLDivElement>(null)
 
   const handlePhotoMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -60,10 +61,11 @@ export default function AboutPage() {
         }
       })
       .catch(() => {})
+      .finally(() => setLoaded(true))
   }, [])
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-20 md:py-28">
+    <div className={`max-w-4xl mx-auto px-6 py-20 md:py-28 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
       <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-12 md:gap-20 items-start">
         {/* Left: Photo + Identity */}
         <div className="fade-up-1">

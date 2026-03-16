@@ -57,6 +57,7 @@ async function addProject(body: Omit<Project, 'id'>) {
 export default function ProjectsPage() {
   const { isAdmin } = useAdmin()
   const [projects, setProjects] = useState<Project[]>(DEFAULT_PROJECTS)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     fetch('/api/content/projects')
@@ -65,6 +66,7 @@ export default function ProjectsPage() {
         if (Array.isArray(data) && data.length > 0) setProjects(data)
       })
       .catch(() => {})
+      .finally(() => setLoaded(true))
   }, [])
 
   const updateProject = (i: number, fields: Partial<Project>) => {
@@ -103,7 +105,7 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-20">
+    <div className={`max-w-4xl mx-auto px-6 py-20 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
       {/* Header */}
       <div className="mb-16">
         <h1 className="font-serif text-4xl font-light text-[#2c2c2c]">Projects</h1>

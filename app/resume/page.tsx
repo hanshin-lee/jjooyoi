@@ -172,6 +172,7 @@ export default function ResumePage() {
   const [experience, setExperience] = useState<ExperienceEntry[]>(DEFAULT_EXPERIENCE)
   const [education, setEducation] = useState<EducationEntry[]>(DEFAULT_EDUCATION)
   const [skills, setSkills] = useState<SkillEntry[]>(DEFAULT_SKILLS)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -185,6 +186,7 @@ export default function ResumePage() {
         if (Array.isArray(sk) && sk.length > 0) setSkills(sk)
       })
       .catch(() => {})
+      .finally(() => setLoaded(true))
   }, [])
 
   // ── Experience helpers ────────────────────────────────────────────────────
@@ -320,7 +322,7 @@ export default function ResumePage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-20">
+    <div className={`max-w-4xl mx-auto px-6 py-20 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
       {/* Header */}
       <div className="mb-16 fade-up">
         <h1 className="font-serif text-4xl font-light text-[#2c2c2c]">Curriculum Vitae</h1>
