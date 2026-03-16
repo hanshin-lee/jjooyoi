@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { EditableField } from '@/components/EditableField'
 import { useAdmin } from '@/contexts/AdminContext'
 import { DropZone } from '@/components/DropZone'
+import { readCache, writeCache } from '@/lib/cache'
 
 type Project = {
   id: string
@@ -60,10 +61,16 @@ export default function ProjectsPage() {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
+    const cached = readCache<Project[]>('projects')
+    if (cached) { setProjects(cached); setLoaded(true) }
+
     fetch('/api/content/projects')
       .then((r) => r.json())
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setProjects(data)
+        if (Array.isArray(data) && data.length > 0) {
+          setProjects(data)
+          writeCache('projects', data)
+        }
       })
       .catch(() => {})
       .finally(() => setLoaded(true))

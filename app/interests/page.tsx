@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { EditableField } from '@/components/EditableField'
 import { useAdmin } from '@/contexts/AdminContext'
 import { DropZone } from '@/components/DropZone'
+import { readCache, writeCache } from '@/lib/cache'
 
 type Interest = {
   id: string
@@ -125,10 +126,16 @@ export default function InterestsPage() {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
+    const cached = readCache<Interest[]>('interests')
+    if (cached) { setInterests(cached); setLoaded(true) }
+
     fetch('/api/content/interests')
       .then((r) => r.json())
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setInterests(data)
+        if (Array.isArray(data) && data.length > 0) {
+          setInterests(data)
+          writeCache('interests', data)
+        }
       })
       .catch(() => {})
       .finally(() => setLoaded(true))

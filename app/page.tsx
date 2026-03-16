@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { EditableField } from '@/components/EditableField'
+import { readCache, writeCache } from '@/lib/cache'
 
 type AboutContent = {
   bio_intro: string
@@ -49,15 +50,20 @@ export default function AboutPage() {
   }
 
   useEffect(() => {
+    const cached = readCache<AboutContent>('about')
+    if (cached) { setContent(cached); setLoaded(true) }
+
     fetch('/api/content/about')
       .then((r) => r.json())
       .then((data) => {
         if (data && !data.error) {
-          setContent({
+          const next: AboutContent = {
             bio_intro: data.bio_intro ?? DEFAULTS.bio_intro,
             bio_main: data.bio_main ?? DEFAULTS.bio_main,
             bio_secondary: data.bio_secondary ?? DEFAULTS.bio_secondary,
-          })
+          }
+          setContent(next)
+          writeCache('about', next)
         }
       })
       .catch(() => {})

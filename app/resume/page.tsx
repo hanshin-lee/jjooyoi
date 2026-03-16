@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { EditableField } from '@/components/EditableField'
 import { useAdmin } from '@/contexts/AdminContext'
+import { readCache, writeCache } from '@/lib/cache'
 
 type ExperienceEntry = {
   id: string
@@ -175,15 +176,30 @@ export default function ResumePage() {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
+    type ResumeCache = { experience: ExperienceEntry[]; education: EducationEntry[]; skills: SkillEntry[] }
+    const cached = readCache<ResumeCache>('resume')
+    if (cached) {
+      setExperience(cached.experience)
+      setEducation(cached.education)
+      setSkills(cached.skills)
+      setLoaded(true)
+    }
+
     Promise.all([
       fetch('/api/content/experience').then((r) => r.json()),
       fetch('/api/content/education').then((r) => r.json()),
       fetch('/api/content/skills').then((r) => r.json()),
     ])
       .then(([exp, edu, sk]) => {
-        if (Array.isArray(exp) && exp.length > 0) setExperience(exp)
-        if (Array.isArray(edu) && edu.length > 0) setEducation(edu)
-        if (Array.isArray(sk) && sk.length > 0) setSkills(sk)
+        const next = {
+          experience: Array.isArray(exp) && exp.length > 0 ? exp : DEFAULT_EXPERIENCE,
+          education: Array.isArray(edu) && edu.length > 0 ? edu : DEFAULT_EDUCATION,
+          skills: Array.isArray(sk) && sk.length > 0 ? sk : DEFAULT_SKILLS,
+        }
+        setExperience(next.experience)
+        setEducation(next.education)
+        setSkills(next.skills)
+        writeCache('resume', next)
       })
       .catch(() => {})
       .finally(() => setLoaded(true))
