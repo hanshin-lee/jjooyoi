@@ -1,35 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { EditableField } from '@/components/EditableField'
-import { readCache, writeCache } from '@/lib/cache'
-
-type AboutContent = {
-  bio_intro: string
-  bio_main: string
-  bio_secondary: string
-}
-
-const DEFAULTS: AboutContent = {
-  bio_intro:
-    'I am an art historian and gallery professional working across exhibition planning, archival research, and editorial writing.',
-  bio_main:
-    'Holding an MA in History of Art from the Courtauld Institute of Art (London) and a BA from the University of Pennsylvania (Philadelphia), my research centers on postwar European and Korean abstraction — particularly the material and biographical dimensions of trauma in the work of Alberto Burri, Manolo Millares, and Ha Chong-Hyun.',
-  bio_secondary:
-    'I have worked with Tina Kim Gallery (Seoul), Victoria Miro (London), and Guildhall Art Gallery (London), contributing to exhibitions, institutional publications, and artist archives across international contexts.',
-}
-
-async function saveAbout(fields: Partial<AboutContent>) {
-  await fetch('/api/content/about', {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(fields),
-  })
-}
+import { useRef } from 'react'
+import { aboutContent } from '@/lib/content'
 
 export default function AboutPage() {
-  const [content, setContent] = useState<AboutContent>(DEFAULTS)
-  const [loaded, setLoaded] = useState(false)
   const photoRef = useRef<HTMLDivElement>(null)
 
   const handlePhotoMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -49,31 +23,9 @@ export default function AboutPage() {
     el.style.transition = 'transform 0.6s ease'
   }
 
-  useEffect(() => {
-    const cached = readCache<AboutContent>('about')
-    if (cached) { setContent(cached); setLoaded(true) }
-
-    fetch('/api/content/about')
-      .then((r) => r.json())
-      .then((data) => {
-        if (data && !data.error) {
-          const next: AboutContent = {
-            bio_intro: data.bio_intro ?? DEFAULTS.bio_intro,
-            bio_main: data.bio_main ?? DEFAULTS.bio_main,
-            bio_secondary: data.bio_secondary ?? DEFAULTS.bio_secondary,
-          }
-          setContent(next)
-          writeCache('about', next)
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoaded(true))
-  }, [])
-
   return (
-    <div className={`max-w-4xl mx-auto px-6 py-20 md:py-28 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
+    <div className="max-w-4xl mx-auto px-6 py-20 md:py-28">
       <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-12 md:gap-20 items-start">
-        {/* Left: Photo + Identity */}
         <div className="fade-up-1">
           <div
             ref={photoRef}
@@ -109,41 +61,16 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Right: Bio */}
         <div className="space-y-6 pt-1 fade-up-2">
-          <EditableField
-            value={content.bio_intro}
-            onSave={async (v) => {
-              setContent((c) => ({ ...c, bio_intro: v }))
-              await saveAbout({ bio_intro: v })
-            }}
-            multiline
-            rows={4}
-            as="p"
-            className="font-serif text-[1.35rem] font-light leading-relaxed text-[#2c2c2c]"
-          />
-          <EditableField
-            value={content.bio_main}
-            onSave={async (v) => {
-              setContent((c) => ({ ...c, bio_main: v }))
-              await saveAbout({ bio_main: v })
-            }}
-            multiline
-            rows={5}
-            as="p"
-            className="font-sans text-sm leading-relaxed text-[#555555]"
-          />
-          <EditableField
-            value={content.bio_secondary}
-            onSave={async (v) => {
-              setContent((c) => ({ ...c, bio_secondary: v }))
-              await saveAbout({ bio_secondary: v })
-            }}
-            multiline
-            rows={4}
-            as="p"
-            className="font-sans text-sm leading-relaxed text-[#555555]"
-          />
+          <p className="font-serif text-[1.35rem] font-light leading-relaxed text-[#2c2c2c]">
+            {aboutContent.bio_intro}
+          </p>
+          <p className="font-sans text-sm leading-relaxed text-[#555555]">
+            {aboutContent.bio_main}
+          </p>
+          <p className="font-sans text-sm leading-relaxed text-[#555555]">
+            {aboutContent.bio_secondary}
+          </p>
           <div className="pt-4 space-y-2.5">
             <p className="font-sans text-xs tracking-widest uppercase text-[#aaa098] mb-3">
               Contact
@@ -193,7 +120,7 @@ export default function AboutPage() {
           </div>
           <div className="pt-4">
             <a
-              href="/resume"
+              href="/resume/"
               className="font-sans text-xs tracking-widest uppercase text-[#aaa098] hover:text-[#2c2c2c] transition-colors border-b border-[#ddd6c8] pb-0.5"
             >
               View CV →

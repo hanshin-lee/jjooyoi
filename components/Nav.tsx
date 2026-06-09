@@ -5,13 +5,14 @@ import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/", label: "About" },
-  { href: "/resume", label: "CV" },
-  { href: "/projects", label: "Projects" },
-  { href: "/interests", label: "Interests" },
+  { href: "/resume/", label: "CV" },
+  { href: "/projects/", label: "Projects" },
+  { href: "/interests/", label: "Interests" },
 ];
 
 export default function Nav() {
   const pathname = usePathname();
+  const normalizedPathname = pathname.endsWith("/") ? pathname : `${pathname}/`;
 
   return (
     <header className="sticky top-0 z-50 bg-beige-50/90 backdrop-blur-sm border-b border-beige-300">
@@ -28,7 +29,7 @@ export default function Nav() {
               key={link.href}
               href={link.href}
               className={`font-sans text-xs tracking-widest uppercase transition-colors pb-0.5 ${
-                pathname === link.href
+                normalizedPathname === link.href
                   ? "text-[#2c2c2c] border-b border-[#2c2c2c]"
                   : "text-[#8b7355] hover:text-[#2c2c2c]"
               }`}
